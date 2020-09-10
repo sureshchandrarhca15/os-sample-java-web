@@ -11,7 +11,7 @@ pipeline {
     DEV_NAMESPACE='hello-world-dev'
     IMAGE_BAKERY_NAMESPACE='image-bakery'
    }
-  agent { label 'maven' }
+  agent { label 's2i' }
 
   stages {
 
@@ -20,7 +20,10 @@ pipeline {
       script {
       try {
       
-      sh "mvn clean install -Dmaven.test.skip=true"
+      sh """ 
+	s2i version 
+	mvn clean install -Dmaven.test.skip=true
+      """
       
         }
       catch (Exception e) {
@@ -83,6 +86,8 @@ pipeline {
      }
     }
   }
+
+/*
   stage('Create Image Builder') {
       when {
         expression {
@@ -116,7 +121,6 @@ pipeline {
       }
     }
 
-/*
     stage('Sign and Push Image to Quay') {
     agent { label 'image_sign' }
       environment
