@@ -83,7 +83,6 @@ pipeline {
      }
     }
   }
-/*
   stage('Create Image Builder') {
       when {
         expression {
@@ -98,7 +97,7 @@ pipeline {
         script {
           openshift.withCluster() {
             openshift.withProject(env.DEV_NAMESPACE) {
-              openshift.newBuild("--name=${env.APP_NAME}", "--image-stream=jboss-webserver30-tomcat8-openshift:1.1", "--binary=true")
+              openshift.newBuild("--name=${env.APP_NAME}", "--image-stream=jboss-webserver50-tomcat9-openshift:1.0", "--binary=true")
             }
           }
         }
@@ -110,13 +109,14 @@ pipeline {
         script {
           openshift.withCluster() {
             openshift.withProject(env.DEV_NAMESPACE) {
-              openshift.selector("bc", "${env.APP_NAME}").startBuild("--from-file=target/demo-0.0.1-SNAPSHOT.war","--follow","--wait=true")
+              openshift.selector("bc", "${env.APP_NAME}").startBuild("--from-file=target/ROOT.war","--follow","--wait=true")
             }
           }
         }
       }
     }
 
+/*
     stage('Sign and Push Image to Quay') {
     agent { label 'image_sign' }
       environment
